@@ -95,7 +95,8 @@ int countEdges(const vector<vector<int>>& adjMatrix)
     }
     return res;
 }
-vector<int> getIsolatedVertices(const vector<vector<int>>& adjMatrix) {
+vector<int> getIsolatedVertices(const vector<vector<int>>& adjMatrix)
+ {
     vector<int> isolated;
     int n = adjMatrix.size();
      for (int i = 0; i < n; i++) 
@@ -116,7 +117,8 @@ vector<int> getIsolatedVertices(const vector<vector<int>>& adjMatrix) {
     }
     return isolated;
 }
-bool isCompleteGraph(const vector<vector<int>>& adjMatrix) {
+bool isCompleteGraph(const vector<vector<int>>& adjMatrix) 
+{
     int n = adjMatrix.size();
     for (int i = 0; i < n; i++) 
     {
@@ -130,19 +132,21 @@ bool isCompleteGraph(const vector<vector<int>>& adjMatrix) {
     }
     return true;
 }
-bool isBipartite(const vector<vector<int>>& adjMatrix) {
+bool isBipartite(const vector<vector<int>>& adjMatrix) 
+{
     int n = adjMatrix.size();
     vector<int> color(n, -1);
 
-    for (int start = 0; start < n; start++) {
+    for (int start = 0; start < n; start++)
+     {
         if (color[start] == -1) {
-            queue<int> q;
-            q.push(start);
+            queue<int> queue;
+            queue.push(start);
             color[start] = 0;
 
-            while (!q.empty()) {
-                int v = q.front();
-                q.pop();
+            while (!queue.empty()) {
+                int v = queue.front();
+                queue.pop();
 
                 for (int neighbor = 0; neighbor < n; neighbor++) 
                 {
@@ -151,7 +155,7 @@ bool isBipartite(const vector<vector<int>>& adjMatrix) {
                         if (color[neighbor] == -1) 
                         {
                             color[neighbor] = 1 - color[v]; 
-                            q.push(neighbor);
+                            queue.push(neighbor);
                         } 
                         else if (color[neighbor] == color[v]) 
                         {
@@ -164,34 +168,46 @@ bool isBipartite(const vector<vector<int>>& adjMatrix) {
     }
     return true;
 }
-bool isCompleteBipartite(const vector<vector<int>>& adjMatrix) {
-    if (!isBipartite(adjMatrix)) return false;
-
+bool isCompleteBipartite(const vector<vector<int>>& adjMatrix) 
+{
+    if (!isBipartite(adjMatrix)) 
+    {
+        return false;
+    }
     int n = adjMatrix.size();
     vector<int> color(n, -1);
     vector<int> group1, group2;
 
-    for (int start = 0; start < n; start++) {
-        if (color[start] == -1) {
-            queue<int> q;
-            q.push(start);
+    for (int start = 0; start < n; start++) 
+    {
+        if (color[start] == -1) 
+        {
+            queue<int> queue;
+            queue.push(start);
             color[start] = 0;
             group1.push_back(start);
 
-            while (!q.empty()) {
-                int v = q.front();
-                q.pop();
+            while (!queue.empty()) 
+            {
+                int v = queue.front();
+                queue.pop();
 
-                for (int neighbor = 0; neighbor < n; neighbor++) {
-                    if (adjMatrix[v][neighbor]) {
-                        if (color[neighbor] == -1) {
+                for (int neighbor = 0; neighbor < n; neighbor++) 
+                {
+                    if (adjMatrix[v][neighbor])
+                    {
+                        if (color[neighbor] == -1)
+                        {
                             color[neighbor] = 1 - color[v];
-                            if (color[neighbor] == 0) {
+                            if (color[neighbor] == 0) 
+                            {
                                 group1.push_back(neighbor);
-                            } else {
+                            } 
+                            else 
+                            {
                                 group2.push_back(neighbor);
                             }
-                            q.push(neighbor);
+                            queue.push(neighbor);
                         }
                     }
                 }
@@ -199,10 +215,14 @@ bool isCompleteBipartite(const vector<vector<int>>& adjMatrix) {
         }
     }
 
-    // Check if every node in group1 connects to every node in group2
-    for (int u : group1) {
-        for (int v : group2) {
-            if (adjMatrix[u][v] == 0) return false;
+    for (int u=0;u<group1.size();u++) 
+    {
+        for (int v=0;v<group2.size();v++) 
+        {
+            if (adjMatrix[u][v] == 0) 
+            {
+                return false;
+            }
         }
     }
 
@@ -241,169 +261,132 @@ vector<vector<int>> getComplementGraph(const vector<vector<int>>& adjMatrix)
     }
     return newMatrix;
 }
-// vector<int> findEulerCycle(vector<vector<int>>& adjMatrix)
-//  {
-//     int n = adjMatrix.size();
-//     stack<int> findPath;
-//     vector<int> res;
-//     vector<vector<int>> graph = adjMatrix;
-//     vector<int> inDegree(n, 0), outDegree(n, 0);
-//     for (int i = 0; i < n; i++) 
-//     {
-//         for (int j = 0; j < n; j++) 
-//         {
-//             outDegree[i] += graph[i][j]; 
-//             inDegree[j] += graph[i][j];  
-//         }
-//     }
 
-//     if (isDirected(adjMatrix)) 
-//     {
-//         for (int i = 0; i < n; i++) 
-//         {
-//             if (inDegree[i] != outDegree[i]) 
-//                 return {}; 
-//         }
-//     } else 
-//     {
-//         for (int i = 0; i < n; i++) 
-//         {
-//             if (outDegree[i] % 2 != 0) 
-//                 return {}; 
-//         }
-//     }
-//     int start = 0;
-//     while (start < n && outDegree[start] == 0)
-//     {
-//         start++;   
-//     }
-//     findPath.push(start);
-
-//     while (!findPath.empty()) 
-//     {
-//         int v = findPath.top();
-        
-//         if (outDegree[v] == 0)
-//         {
-//             res.push_back(v);
-//             findPath.pop();
-//         } 
-//         else 
-//         {
-//             for (int j = 0; j < n; j++) 
-//             {
-//                 if (graph[v][j] > 0) 
-//                 {
-//                     findPath.push(j);
-//                     graph[v][j]--; 
-//                     if (!isDirected(adjMatrix)) 
-//                     {
-//                     graph[j][v]--; 
-//                     }
-//                     outDegree[v]--;
-//                     if (isDirected(adjMatrix)) 
-//                     {
-//                     inDegree[j]--;
-//                     }
-//                     break;
-//                 }
-//             }
-//         }
-//     }
-
-//     return res; 
-// }
-
-
-vector<int> findEulerCycle(vector<vector<int>>& adjMatrix) {
+vector<int> findEulerCycleUndirected(vector<vector<int>>& adjMatrix) 
+{
     int n = adjMatrix.size();
-    stack<int> findPath;
+    stack<int> stack;
+    vector<int> res;
+    vector<vector<int>> graph = adjMatrix;
+    vector<int> degree(n, 0);
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            degree[i] += graph[i][j];
+
+
+    for (int i = 0; i < n; i++)
+        if (degree[i] % 2 != 0)
+            return {}; 
+
+    int start = 0;
+    while (start < n && degree[start] == 0) start++;
+    stack.push(start);
+
+    while (!stack.empty()) 
+    {
+        int vertices = stack.top();
+
+        if (degree[vertices] == 0)
+        {
+            res.push_back(vertices);
+            stack.pop();
+        } 
+        else
+        {
+            for (int u = 0; u < n; u++) 
+            {
+                if (graph[vertices][u] > 0) 
+                {
+                    stack.push(u);
+                    graph[vertices][u]--;
+                    graph[u][vertices]--;
+                    degree[vertices]--;
+                    degree[u]--;
+                    break;
+                }
+            }
+        }
+    }
+
+    return res;
+}
+
+vector<int> findEulerCycleDirected(vector<vector<int>>& adjMatrix) 
+{
+    int n = adjMatrix.size();
+    stack<int> stack;
     vector<int> res;
     vector<vector<int>> graph = adjMatrix;
     vector<int> inDegree(n, 0), outDegree(n, 0);
 
-    // Calculate in-degrees and out-degrees
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++) 
         {
             outDegree[i] += graph[i][j];
             inDegree[j] += graph[i][j];
         }
-
-    // Eulerian cycle conditions
-    bool directed = isDirected(adjMatrix);
-    if (directed) {
-        for (int i = 0; i < n; i++)
-            if (inDegree[i] != outDegree[i])
-                return {}; // No Euler cycle exists
-    } else {
-        for (int i = 0; i < n; i++)
-            if (outDegree[i] % 2 != 0)
-                return {}; // No Euler cycle exists
-    }
-
-    // Start from a valid node
+    for (int i = 0; i < n; i++)
+        if (inDegree[i] != outDegree[i])
+        {
+            return {}; 
+        } 
     int start = 0;
     while (start < n && outDegree[start] == 0) start++;
-    findPath.push(start);
+    stack.push(start);
 
-    while (!findPath.empty()) {
-        int v = findPath.top();
+    while (!stack.empty()) 
+    {
+        int vertices = stack.top();
 
-        if (outDegree[v] == 0) {
-            res.push_back(v);
-            findPath.pop();
-        } else {
-            for (int j = 0; j < n; j++) {
-                if (graph[v][j] > 0) {
-                    findPath.push(j);
-                    graph[v][j]--;
-                    if (!directed) graph[j][v]--; // Remove reverse edge for undirected graph
-                    outDegree[v]--;
-                    if (directed) inDegree[j]--;
+        if (outDegree[vertices] == 0) 
+        {
+            res.push_back(vertices);
+            stack.pop();
+        } 
+        else 
+        {
+            int u = -1;
+            for (int neighbor = 0; neighbor < n; neighbor++) 
+            {
+                if (graph[vertices][neighbor] > 0) 
+                {
+                    u = neighbor;
                     break;
                 }
             }
+
+            if (u != -1) 
+            {
+                stack.push(u);
+                graph[vertices][u]--;
+                outDegree[vertices]--;
+                inDegree[u]--;
+            }
         }
     }
-    
     return res;
 }
 
+vector<int> findEulerCycle(vector<vector<int>>& adjMatrix) 
+{
+    if(isDirected(adjMatrix))
+    {
+        return findEulerCycleDirected(adjMatrix);
+    }
+    else
+    {
+        return findEulerCycleUndirected(adjMatrix);
+    }
+}
 
-
-
-
-
-
-// void dfs(int node, vector<vector<int>>& adjMatrix, vector<bool>& visited, vector<vector<int>>& spanningTree) 
-// {
-//     visited[node] = true;
-//     for (int u = 0; u < adjMatrix.size(); u++) 
-//     {
-//         if (adjMatrix[node][u] && !visited[u]) 
-//         {
-//             spanningTree[node][u] = 1;
-//             spanningTree[u][node] = 1; 
-//             dfs(u, adjMatrix, visited, spanningTree);
-//         }
-//     }
-// }
-
-// vector<vector<int>> dfsSpanningTree(vector<vector<int>>& adjMatrix, int start) 
-// {
-//     int n = adjMatrix.size();
-//     vector<vector<int>> spanningTree(n, vector<int>(n, 0));
-//     vector<bool> visited(n, false);
-//     dfs(start, adjMatrix, visited, spanningTree);
-//     return spanningTree;
-// }
-
-
-void dfs(int node, vector<vector<int>>& adjMatrix, vector<bool>& visited, vector<vector<int>>& spanningTree) {
+void dfs(int node, vector<vector<int>>& adjMatrix, vector<bool>& visited, vector<vector<int>>& spanningTree) 
+{
     visited[node] = true;
-    for (int u = 0; u < adjMatrix.size(); u++) {
-        if (adjMatrix[node][u] && !visited[u]) {
+    for (int u = 0; u < adjMatrix.size(); u++) 
+    {
+        if (adjMatrix[node][u] && !visited[u]) 
+        {
             spanningTree[node][u] = 1;
             spanningTree[u][node] = 1;
             dfs(u, adjMatrix, visited, spanningTree);
@@ -411,7 +394,8 @@ void dfs(int node, vector<vector<int>>& adjMatrix, vector<bool>& visited, vector
     }
 }
 
-vector<vector<int>> dfsSpanningTree(vector<vector<int>>& adjMatrix, int start) {
+vector<vector<int>> dfsSpanningTree(vector<vector<int>>& adjMatrix, int start)
+{
     int n = adjMatrix.size();
     vector<vector<int>> spanningTree(n, vector<int>(n, 0));
     vector<bool> visited(n, false);
@@ -419,64 +403,35 @@ vector<vector<int>> dfsSpanningTree(vector<vector<int>>& adjMatrix, int start) {
     return spanningTree;
 }
 
-
-// vector<vector<int>> bfsSpanningTree(const vector<vector<int>>& adjMatrix, int start) 
-// {
-//     int n = adjMatrix.size();
-//     vector<vector<int>> spanningTree(n, vector<int>(n, 0));
-//     vector<bool> visited(n, false);
-//     queue<int> q;
-    
-//     visited[start] = true;
-//     q.push(start);
-
-//     while (!q.empty()) 
-//     {
-//         int node = q.front();
-//         q.pop();
-//         for (int neighbor = 0; neighbor < n; neighbor++) 
-//         {
-//             if (adjMatrix[node][neighbor] && !visited[neighbor]) 
-//             {
-//                 spanningTree[node][neighbor] = 1; 
-//                 spanningTree[neighbor][node] = 1; 
-//                 visited[neighbor] = true;
-//                 q.push(neighbor);
-//             }
-//         }
-//     }
-
-//     return spanningTree;
-// }
-
-vector<vector<int>> bfsSpanningTree(const vector<vector<int>>& adjMatrix, int start) {
+vector<vector<int>> bfsSpanningTree(const vector<vector<int>>& adjMatrix, int start)
+{
     int n = adjMatrix.size();
     vector<vector<int>> spanningTree(n, vector<int>(n, 0));
     vector<bool> visited(n, false);
-    queue<int> q;
+    queue<int> queue;
 
     visited[start] = true;
-    q.push(start);
+    queue.push(start);
 
-    while (!q.empty()) {
-        int node = q.front();
-        q.pop();
+    while (!queue.empty()) 
+    {
+        int node = queue.front();
+        queue.pop();
 
-        for (int neighbor = 0; neighbor < n; neighbor++) {
-            if (adjMatrix[node][neighbor] && !visited[neighbor]) {
+        for (int neighbor = 0; neighbor < n; neighbor++) 
+        {
+            if (adjMatrix[node][neighbor] && !visited[neighbor]) 
+            {
                 spanningTree[node][neighbor] = 1;
                 spanningTree[neighbor][node] = 1;
                 visited[neighbor] = true;
-                q.push(neighbor);
+                queue.push(neighbor);
             }
         }
     }
 
     return spanningTree;
 }
-
-
-
 void CheckConnection(int node, vector<vector<int>>& adjMatrix, vector<bool>& visited) 
 {
     int n = adjMatrix.size();
@@ -489,7 +444,6 @@ void CheckConnection(int node, vector<vector<int>>& adjMatrix, vector<bool>& vis
         }
     }
 }
-
 bool isConnected(int u, int v,vector<vector<int>>& adjMatrix) 
 {
     int n = adjMatrix.size();
@@ -502,57 +456,72 @@ bool isConnected(int u, int v,vector<vector<int>>& adjMatrix)
 vector<int> dijkstra(int start, int end, const vector<vector<int>>& adjMatrix) 
 {
     int n = adjMatrix.size();
-    vector<int> dist(n, INT_MAX), prev(n, -1);
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    vector<int> distance(n, INT_MAX), prev(n, -1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> queue;
 
-    dist[start] = 0;
-    pq.push({0, start});
+    distance[start] = 0;
+    queue.push({0, start});
 
-    while (!pq.empty()) 
+    while (!queue.empty()) 
     {
-        int d = pq.top().first, u = pq.top().second;
-        pq.pop();
+        int d = queue.top().first, u = queue.top().second;
+        queue.pop();
 
-        if (d > dist[u]) continue;
+        if (d > distance[u]) 
+        {
+            continue;
+        }
 
         for (int v = 0; v < n; v++) 
         {
             if (adjMatrix[u][v] > 0) 
             {
-                int newDist = dist[u] + adjMatrix[u][v];
-                if (newDist < dist[v]) 
+                int newDist = distance[u] + adjMatrix[u][v];
+                if (newDist < distance[v]) 
                 {
-                    dist[v] = newDist;
+                    distance[v] = newDist;
                     prev[v] = u;
-                    pq.push({newDist, v});
+                    queue.push({newDist, v});
                 }
             }
         }
     }
 
     vector<int> path;
-    for (int at = end; at != -1; at = prev[at]) path.push_back(at);
+    for (int curr = end; curr != -1; curr = prev[curr]) 
+    {
+        path.push_back(curr);
+    }
     reverse(path.begin(), path.end());
 
-    return (path[0] == start) ? path : vector<int>();
+if(path[0] == start)
+{
+    return path;
+}
+else
+{
+    return  vector<int>();
+}
+
 }
 vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix) 
 {
     int n = adjMatrix.size();
-    vector<int> dist(n, INT_MAX), prev(n, -1);
-    dist[start] = 0;
+    vector<int> distance(n, INT_MAX), prev(n, -1);
+    distance[start] = 0;
 
     for (int i = 0; i < n - 1; i++) 
     { 
         for (int u = 0; u < n; u++) 
         {
-            for (int v = 0; v < n; v++) {
-                if (adjMatrix[u][v] > 0 && dist[u] != INT_MAX) 
+            for (int v = 0; v < n; v++) 
+            {
+                if (adjMatrix[u][v] > 0 && distance[u] != INT_MAX) 
                 {
-                    int newDist = dist[u] + adjMatrix[u][v];
-                    if (newDist < dist[v]) 
+                    int newDist = distance[u] + adjMatrix[u][v];
+                    if (newDist < distance[v]) 
                     {
-                        dist[v] = newDist;
+                        distance[v] = newDist;
                         prev[v] = u;
                     }
                 }
@@ -561,72 +530,18 @@ vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix
     }
 
     vector<int> path;
-    for (int at = end; at != -1; at = prev[at]) path.push_back(at);
+    for (int curr = end; curr != -1; curr = prev[curr]) 
+    {
+        path.push_back(curr);
+    }
     reverse(path.begin(), path.end());
 
-    return (path[0] == start) ? path : vector<int>(); 
+    if(path[0] == start)
+{
+    return path;
 }
-int main() {
-    // Example adjacency matrix for testing
-    vector<vector<int>> adjMatrix = {
-        {0, 1, 1, 0},
-        {1, 0, 0, 1},
-        {1, 0, 0, 1},
-        {0, 1, 1, 0}
-    };
-
-    int startVertex = 0;
-    int endVertex = 3;
-
-    // Test Euler Cycle
-    vector<int> eulerCycle = findEulerCycle(adjMatrix);
-    if (!eulerCycle.empty()) {
-        cout << "Euler Cycle: ";
-        for (int v : eulerCycle) cout << v << " ";
-        cout << endl;
-    } else {
-        cout << "No Euler Cycle exists." << endl;
-    }
-
-    // Test DFS Spanning Tree
-    vector<vector<int>> dfsTree = dfsSpanningTree(adjMatrix, startVertex);
-    cout << "DFS Spanning Tree:\n";
-    for (const auto& row : dfsTree) {
-        for (int val : row) cout << val << " ";
-        cout << endl;
-    }
-
-    // Test BFS Spanning Tree
-    vector<vector<int>> bfsTree = bfsSpanningTree(adjMatrix, startVertex);
-    cout << "BFS Spanning Tree:\n";
-    for (const auto& row : bfsTree) {
-        for (int val : row) cout << val << " ";
-        cout << endl;
-    }
-
-    // Test Connectivity
-    cout << "Is Connected (" << startVertex << " → " << endVertex << ")? "
-         << (isConnected(startVertex, endVertex, adjMatrix) ? "Yes" : "No") << endl;
-
-    // Test Dijkstra's Algorithm
-    vector<int> shortestPathDijkstra = dijkstra(startVertex, endVertex, adjMatrix);
-    if (!shortestPathDijkstra.empty()) {
-        cout << "Shortest Path (Dijkstra): ";
-        for (int v : shortestPathDijkstra) cout << v << " ";
-        cout << endl;
-    } else {
-        cout << "No Path Found (Dijkstra)." << endl;
-    }
-
-    // Test Bellman-Ford Algorithm
-    vector<int> shortestPathBellman = bellmanFord(startVertex, endVertex, adjMatrix);
-    if (!shortestPathBellman.empty()) {
-        cout << "Shortest Path (Bellman-Ford): ";
-        for (int v : shortestPathBellman) cout << v << " ";
-        cout << endl;
-    } else {
-        cout << "No Path Found (Bellman-Ford)." << endl;
-    }
-
-    return 0;
+else
+{
+    return  vector<int>();
+}
 }
